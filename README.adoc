@@ -1,0 +1,8 @@
+= Fabric8 Starter project
+
+A sample application that uses the https://github.com/fabric8-services/fabric8-common[Fabric8-Common] packages and dependencies as a foundation.
+
+This project includes a GOA design file for some `labels`, which result in a `label` controller generated my the `make generate` goal defined in the link:Makefile[Makefile].
+Also, the `status` controller is created as its design is imported 
+
+
