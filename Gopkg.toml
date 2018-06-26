@@ -26,10 +26,9 @@
 
 
 required = [
-  "github.com/fabric8-services/fabric8-common/log",
-  "github.com/fabric8-services/fabric8-common/goasupport",
-  "github.com/fabric8-services/fabric8-common/goasupport/jsonapi_errors_stringer",
-  "github.com/fabric8-services/fabric8-common/goasupport/status",
+  "github.com/fabric8-services/fabric8-common/makefile", # needed to import Makefile
+  "github.com/fabric8-services/fabric8-common/goasupport/jsonapi_errors_helpers", # needed by goa generator
+  "github.com/fabric8-services/fabric8-common/goasupport/status", # needed by goa generator
   "github.com/goadesign/goa/cors",
   "github.com/goadesign/goa/encoding/form",
   "github.com/goadesign/goa/goagen",
@@ -41,7 +40,14 @@ required = [
   "github.com/goadesign/goa/goagen/gen_js",
   "github.com/goadesign/goa/goagen/utils",
   "github.com/goadesign/goa/goatest",
-  
+  "github.com/davecgh/go-spew/spew",
+  "github.com/golang/lint/golint",
+  "github.com/fzipp/gocyclo",
+  "github.com/pilu/fresh", # used to rebuild if source changed while running
+]
+
+ignored = [
+  "github.com/fabric8-services/fabric8-starter/app",
 ]
 
 
@@ -52,8 +58,4 @@ required = [
 [[constraint]]
   name = "github.com/fabric8-services/fabric8-common"
   source = "github.com/xcoulon/fabric8-common"
-  revision = "1c3e739"
-
-[[constraint]]
-  name = "github.com/prometheus/client_golang"
-  version = "0.8.0"
+  revision = "29266d5"

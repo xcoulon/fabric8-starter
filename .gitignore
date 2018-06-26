@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+bin
 
 # Test binary, build with `go test -c`
 *.test
@@ -13,3 +14,10 @@
 
 # vendored deps are not kept in git
 vendor
+
+# generate goa code
+app
+swagger
+
+# tmp dir
+tmp

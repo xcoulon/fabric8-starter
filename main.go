@@ -7,13 +7,17 @@ import (
 	"os/user"
 	"runtime"
 
-	"github.com/fabric8-services/fabric8-common/jsonapi"
+	"github.com/fabric8-services/fabric8-common/configuration"
 	"github.com/fabric8-services/fabric8-common/log"
+	"github.com/fabric8-services/fabric8-common/sentry"
+	"github.com/fabric8-services/fabric8-starter/app"
 	"github.com/fabric8-services/fabric8-starter/controller"
-	"github.com/fabric8-services/fabric8-wit/configuration"
 	"github.com/goadesign/goa"
+	goalogrus "github.com/goadesign/goa/logging/logrus"
 	"github.com/goadesign/goa/middleware"
+	"github.com/goadesign/goa/middleware/gzip"
 	"github.com/google/gops/agent"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -23,7 +27,6 @@ func main() {
 	// --------------------------------------------------------------------
 	var configFilePath string
 	var printConfig bool
-	var migrateDB bool
 	flag.StringVar(&configFilePath, "config", "", "Path to the config file to read")
 	flag.BoolVar(&printConfig, "printConfig", false, "Prints the config (including merged environment variables) and exits")
 	flag.Parse()
@@ -58,16 +61,16 @@ func main() {
 	log.InitializeLogger(config.IsLogJSON(), config.GetLogLevel())
 
 	// Initialize sentry client
-	// haltSentry, err := sentry.InitializeSentryClient(
-	// 	sentry.WithRelease(controller.Commit),
-	// 	sentry.WithEnvironment(config.GetEnvironment()),
-	// )
-	// if err != nil {
-	// 	log.Panic(nil, map[string]interface{}{
-	// 		"err": err,
-	// 	}, "failed to setup the sentry client")
-	// }
-	// defer haltSentry()
+	haltSentry, err := sentry.InitializeSentryClient(
+		sentry.WithRelease(app.Commit),
+		sentry.WithEnvironment(config.GetEnvironment()),
+	)
+	if err != nil {
+		log.Panic(nil, map[string]interface{}{
+			"err": err,
+		}, "failed to setup the sentry client")
+	}
+	defer haltSentry()
 
 	printUserInfo()
 
@@ -78,7 +81,7 @@ func main() {
 	service.Use(middleware.RequestID())
 	// Use our own log request to inject identity id and modify other properties
 	service.Use(gzip.Middleware(9))
-	service.Use(jsonapi.ErrorHandler(service, true))
+	service.Use(app.ErrorHandler(service, true))
 	service.Use(middleware.Recover())
 
 	service.WithLogger(goalogrus.New(log.Logger()))
@@ -86,16 +89,16 @@ func main() {
 	// service.Use(metric.Recorder())
 
 	// Mount the 'status controller
-	statusCtrl := controller.NewStatusController(service, db)
+	statusCtrl := controller.NewStatusController(service)
 	app.MountStatusController(service, statusCtrl)
 
 	// Mount the 'label' controller
-	labelCtrl := controller.NewLabelController(service, config)
-	app.MountFeaturesController(service, labelCtrl)
+	labelCtrl := controller.NewLabelController(service)
+	app.MountLabelController(service, labelCtrl)
 
 	log.Logger().Infoln("Git Commit SHA: ", app.Commit)
 	log.Logger().Infoln("UTC Build Time: ", app.BuildTime)
-	log.Logger().Infoln("UTC Start Time: ", controller.StartTime)
+	log.Logger().Infoln("UTC Start Time: ", app.StartTime)
 	log.Logger().Infoln("Dev mode:       ", config.IsPostgresDeveloperModeEnabled())
 	log.Logger().Infoln("GOMAXPROCS:     ", runtime.GOMAXPROCS(-1))
 	log.Logger().Infoln("NumCPU:         ", runtime.NumCPU())
@@ -115,21 +118,21 @@ func main() {
 	}
 
 	// // Start/mount metrics http
-	// if config.GetHTTPAddress() == config.GetMetricsHTTPAddress() {
-	// 	http.Handle("/metrics", promhttp.Handler())
-	// } else {
-	// 	go func(metricAddress string) {
-	// 		mx := http.NewServeMux()
-	// 		mx.Handle("/metrics", promhttp.Handler())
-	// 		if err := http.ListenAndServe(metricAddress, mx); err != nil {
-	// 			log.Error(nil, map[string]interface{}{
-	// 				"addr": metricAddress,
-	// 				"err":  err,
-	// 			}, "unable to connect to metrics server")
-	// 			service.LogError("startup", "err", err)
-	// 		}
-	// 	}(config.GetMetricsHTTPAddress())
-	// }
+	if config.GetHTTPAddress() == config.GetMetricsHTTPAddress() {
+		http.Handle("/metrics", promhttp.Handler())
+	} else {
+		go func(metricAddress string) {
+			mx := http.NewServeMux()
+			mx.Handle("/metrics", promhttp.Handler())
+			if err := http.ListenAndServe(metricAddress, mx); err != nil {
+				log.Error(nil, map[string]interface{}{
+					"addr": metricAddress,
+					"err":  err,
+				}, "unable to connect to metrics server")
+				service.LogError("startup", "err", err)
+			}
+		}(config.GetMetricsHTTPAddress())
+	}
 
 	// Start http
 	if err := http.ListenAndServe(config.GetHTTPAddress(), nil); err != nil {

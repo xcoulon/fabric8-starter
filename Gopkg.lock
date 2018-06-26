@@ -14,6 +14,24 @@
   revision = "783273d703149aaeb9897cf58613d5af48861c25"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/beorn7/perks"
+  packages = ["quantile"]
+  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
+
+[[projects]]
+  name = "github.com/certifi/gocertifi"
+  packages = ["."]
+  revision = "deb3ae2ef2610fde3330947281941c562861188b"
+  version = "2018.01.18"
+
+[[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
+  version = "v1.1.0"
+
+[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
@@ -32,32 +50,50 @@
   version = "v5.0.1"
 
 [[projects]]
-  name = "github.com/fabric8-services/fabric8-common"
+  branch = "master"
+  name = "github.com/fabric8-services/fabric8-auth"
   packages = [
-    "design",
-    "goasupport",
-    "goasupport/jsonapi_errors_stringer",
-    "goasupport/status",
-    "log"
+    "errors",
+    "log",
+    "rest",
+    "token/jwk"
   ]
-  revision = "be86807"
-  source = "github.com/xcoulon/fabric8-common"
+  revision = "dfc04a321768e806b82769591a08ae5754b21673"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/fabric8-services/fabric8-wit"
+  name = "github.com/fabric8-services/fabric8-common"
   packages = [
     "configuration",
+    "design",
     "errors",
-    "rest"
+    "goasupport/jsonapi_errors_helpers",
+    "goasupport/status",
+    "httpsupport",
+    "log",
+    "login/tokencontext",
+    "makefile",
+    "sentry",
+    "token"
   ]
-  revision = "14228fcaed25e8e803cda30f109104aebd45e32b"
+  revision = "29266d5"
+  source = "github.com/xcoulon/fabric8-common"
 
 [[projects]]
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
   version = "v1.4.7"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/fzipp/gocyclo"
+  packages = ["."]
+  revision = "6acd4345c835499920e8426c7e4e8d7a34f1bb83"
+
+[[projects]]
+  name = "github.com/getsentry/raven-go"
+  packages = ["."]
+  revision = "master"
 
 [[projects]]
   name = "github.com/goadesign/goa"
@@ -81,13 +117,37 @@
     "goagen/meta",
     "goagen/utils",
     "goatest",
+    "logging/logrus",
     "middleware",
+    "middleware/gzip",
     "middleware/security/jwt",
     "uuid",
     "version"
   ]
   revision = "5646a430cdeb66983d5ace3384e0a667c185abc7"
   version = "v1.3.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/golang/lint"
+  packages = ["golint"]
+  revision = "470b6b0bb3005eda157f0275e2e4895055396a81"
+
+[[projects]]
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
+  version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/google/gops"
+  packages = [
+    "agent",
+    "internal",
+    "signal"
+  ]
+  revision = "0e2aa5d22efec1603f7ded7097c500e9a36a13b3"
+  version = "v0.3.3"
 
 [[projects]]
   branch = "master"
@@ -119,10 +179,22 @@
   revision = "ef8a98b0bbce4a65b5aa4c368430a80ddc533168"
 
 [[projects]]
+  name = "github.com/howeyc/fsnotify"
+  packages = ["."]
+  revision = "441bbc86b167f3c1f4786afae9931403b99fdacf"
+  version = "v0.9.0"
+
+[[projects]]
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
   version = "v1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/kardianos/osext"
+  packages = ["."]
+  revision = "ae77be60afb1dcacde03767a8c37337fad28ac14"
 
 [[projects]]
   name = "github.com/magiconair/properties"
@@ -137,6 +209,24 @@
   revision = "9fbc68a78c4dbc7914e1a23f88f126bea4383b97"
 
 [[projects]]
+  name = "github.com/mattn/go-colorable"
+  packages = ["."]
+  revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
+  version = "v0.0.9"
+
+[[projects]]
+  name = "github.com/mattn/go-isatty"
+  packages = ["."]
+  revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
+  version = "v0.0.3"
+
+[[projects]]
+  name = "github.com/matttproud/golang_protobuf_extensions"
+  packages = ["pbutil"]
+  revision = "c12348ce28de40eed0136aa2b644d0ee0650e56c"
+  version = "v1.0.1"
+
+[[projects]]
   branch = "master"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
@@ -149,10 +239,61 @@
   version = "v1.2.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/pilu/config"
+  packages = ["."]
+  revision = "3eb99e6c0b9a2dae0f56f05552c06ca5a643919b"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/pilu/fresh"
+  packages = [
+    ".",
+    "runner"
+  ]
+  revision = "9c0092493eff2825c3abf64e087b3383dec939c3"
+
+[[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
   version = "v0.8.0"
+
+[[projects]]
+  name = "github.com/prometheus/client_golang"
+  packages = [
+    "prometheus",
+    "prometheus/promhttp"
+  ]
+  revision = "c5b7fccd204277076155f10851dad72b76a49317"
+  version = "v0.8.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/prometheus/client_model"
+  packages = ["go"]
+  revision = "99fa1f4be8e564e8a6b613da7fa6f46c9edafc6c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/prometheus/common"
+  packages = [
+    "expfmt",
+    "internal/bitbucket.org/ww/goautoneg",
+    "model"
+  ]
+  revision = "7600349dcfe1abd18d72d3a1770870d9800a7801"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/prometheus/procfs"
+  packages = [
+    ".",
+    "internal/util",
+    "nfs",
+    "xfs"
+  ]
+  revision = "7d6f385de8bea29190f15ba9931442a0eaef9af7"
 
 [[projects]]
   name = "github.com/satori/go.uuid"
@@ -213,6 +354,21 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/crypto"
+  packages = [
+    "ed25519",
+    "ed25519/internal/edwards25519"
+  ]
+  revision = "a49355c7e3f8fe157a85be2f77e6e269a0f89602"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/lint"
+  packages = ["."]
+  revision = "470b6b0bb3005eda157f0275e2e4895055396a81"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/net"
   packages = ["websocket"]
   revision = "db08ff08e8622530d9ed3a0e8ac279f6d4c02196"
@@ -239,8 +395,23 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/tools"
-  packages = ["go/ast/astutil"]
+  packages = [
+    "go/ast/astutil",
+    "go/gcexportdata",
+    "go/internal/gcimporter",
+    "go/types/typeutil"
+  ]
   revision = "fcb3cb6c24ed40ff2a8753f4257a76dc3022330c"
+
+[[projects]]
+  name = "gopkg.in/square/go-jose.v2"
+  packages = [
+    ".",
+    "cipher",
+    "json"
+  ]
+  revision = "76dd09796242edb5b897103a75df2645c028c960"
+  version = "v2.1.6"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"
@@ -251,6 +422,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "24f820e4f3ad3837bb6db45513aa25091e88381e0524da4a9d0c486785efdfd6"
+  inputs-digest = "23d114a48f05d164c0c332e97180c7027f217af71bda0dffc2a04c5cd089a963"
   solver-name = "gps-cdcl"
   solver-version = 1
